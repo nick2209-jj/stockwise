@@ -26,7 +26,7 @@ export const starterMovements = [
   { id: "m5", productId: "p5", quantity: 10, reason: "Supplier delivery", user: "Jamie Diaz", date: "Oct 14, 2026 · 02:21 PM" },
 ];
 
-export const money = (value) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(value) || 0);
+export const money = (value) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(Number(value) || 0);
 export const todayString = () => new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 export const timeString = () => new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-export const productStatus = (product) => product.stock <= 0 ? ["Out of stock", "cancelled"] : product.stock < 10 ? ["Low stock", "pending"] : ["In stock", "shipped"];
+export const productStatus = (product, threshold = 5) => product.stock <= 0 ? ["Out of stock", "cancelled"] : product.stock < threshold ? ["Low stock", "pending"] : ["In stock", "shipped"];
