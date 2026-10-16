@@ -1,0 +1,14 @@
+{
+  "name": "ioms-mern",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace client",
+    "build": "npm run build --workspace client",
+    "server": "npm run dev --workspace server"
+  }
+}
