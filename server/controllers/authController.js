@@ -8,6 +8,7 @@ function publicUser(user) {
     name: user.name,
     email: user.email,
     address: user.address,
+    role: user.role,
   };
 }
 
@@ -17,6 +18,12 @@ const authController = {
       const { name, email, address, password } = req.body;
       if (!name?.trim() || !email?.trim() || !password) {
         return res.status(400).json({ message: "Name, email, and password are required." });
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        return res.status(400).json({ message: "Enter a valid email address." });
+      }
+      if (password.length < 8) {
+        return res.status(400).json({ message: "Password must be at least 8 characters." });
       }
 
       const normalizedEmail = email.trim().toLowerCase();
@@ -35,10 +42,11 @@ const authController = {
 
       return res.status(201).json({
         message: "User registered successfully.",
-        token: generateToken(user._id),
+        token: generateToken(user._id, user.role),
         user: publicUser(user),
       });
     } catch (error) {
+      if (error.code === 11000) return res.status(409).json({ message: "A user with this email already exists." });
       console.error("User registration failed.", error);
       return res.status(500).json({ message: "Unable to register user." });
     }
@@ -58,13 +66,16 @@ const authController = {
 
       return res.status(200).json({
         message: "Login successful.",
-        token: generateToken(user._id),
+        token: generateToken(user._id, user.role),
         user: publicUser(user),
       });
     } catch (error) {
       console.error("User login failed.", error);
       return res.status(500).json({ message: "Unable to log in." });
     }
+  },
+  async currentUser(req, res) {
+    return res.json({ user: publicUser(req.user) });
   },
 };
 

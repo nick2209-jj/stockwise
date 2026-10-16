@@ -29,13 +29,15 @@ const inventoryMovementSchema = new mongoose.Schema(
       type: String,
       required: [true, "Movement reason is required"],
       enum: [
-        "Stock Added",
-        "Sale",
-        "Return",
-        "Adjustment",
-        "Order Cancellation",
+        "Restock",
+        "Damaged",
+        "Customer Return",
+        "Audit",
+        "CUSTOMER_ORDER",
+        "ORDER_CANCELLED",
       ],
     },
+    orderId: { type: mongoose.Schema.Types.ObjectId, ref: "Order" },
   },
   {
     timestamps: {
@@ -45,8 +47,6 @@ const inventoryMovementSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(
-  "InventoryMovement",
-  inventoryMovementSchema
-);
+inventoryMovementSchema.index({ createdAt: -1 });
 
+module.exports = mongoose.models.InventoryMovement || mongoose.model("InventoryMovement", inventoryMovementSchema);

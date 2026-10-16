@@ -27,11 +27,16 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password hash is required"],
       select: false,
     },
+    role: {
+      type: String,
+      enum: ["Admin", "Customer"],
+      default: "Customer",
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
-
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);

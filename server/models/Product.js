@@ -20,6 +20,7 @@ const productSchema = new mongoose.Schema(
       required: [true, "SKU is required"],
       trim: true,
       uppercase: true,
+      unique: true,
     },
 
     description: {
@@ -50,14 +51,16 @@ const productSchema = new mongoose.Schema(
         message: "Stock quantity must be an integer",
       },
     },
+    imageUrl: {
+      type: String,
+      trim: true,
+      maxlength: 2048,
+      default: "https://via.placeholder.com/150?text=No+Image",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// SKU must be unique for each user.
-productSchema.index({ userId: 1, sku: 1 }, { unique: true });
-
-module.exports = mongoose.model("Product", productSchema);
-
+module.exports = mongoose.models.Product || mongoose.model("Product", productSchema);
